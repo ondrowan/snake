@@ -22,15 +22,19 @@ void render(const std::vector<std::reference_wrapper<Entity>>& entities)
             switch (point.material)
             {
                 case Material::SNAKE_HEAD:
+                    attron(COLOR_PAIR(1));
                     character = "O";
                     break;
                 case Material::SNAKE_BODY:
+                    attron(COLOR_PAIR(1));
                     character = "o";
                     break;
                 case Material::WALL:
+                    attron(COLOR_PAIR(3));
                     character = "#";
                     break;
                 case Material::BERRY:
+                    attron(COLOR_PAIR(2));
                     character = ".";
                     break;
             }
@@ -45,10 +49,15 @@ int main()
     int windowHeight = 0, windowWidth = 0;
 
     auto window = initscr();
+    start_color();
     noecho();
     nodelay(window, TRUE);
     curs_set(FALSE);
     getmaxyx(stdscr, windowHeight, windowWidth);
+
+    init_pair(1, COLOR_GREEN, COLOR_BLACK);
+    init_pair(2, COLOR_RED, COLOR_BLACK);
+    init_pair(3, COLOR_WHITE, COLOR_BLACK);
 
     const Point worldStart{ 0, 0 };
     const Point worldEnd{ 30, 20 };
@@ -113,6 +122,8 @@ int main()
                     break;
             }
         }
+
+        attron(COLOR_PAIR(3));
         mvprintw(31, 30, "Score: %i", score);
 
         if (std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMove).count() > 200 && !gameOver) {
