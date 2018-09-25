@@ -1,11 +1,6 @@
-#include <cassert>
-#include <array>
-#include <deque>
 #include <vector>
 #include <chrono>
 #include <ncurses.h>
-#include <algorithm>
-#include <functional>
 #include "snake.h"
 #include "point.h"
 #include "berry.h"

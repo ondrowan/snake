@@ -1,3 +1,4 @@
+#include <cassert>
 #include "world.h"
 
 World::World(const Point& from, const Point& to)
