@@ -8,8 +8,9 @@ Berry::Berry(int x, int y)
 
 Berry spawnBerry(Point from, Point to)
 {
-    int x = rand() % to.x + from.x - 1;
-    int y = rand() % to.y + from.y - 1;
+    srand(time(NULL));
+    int x = rand() % (to.x - 1) + (from.x + 1);
+    int y = rand() % (to.y - 1) + (from.y + 1);
 
     return Berry(x, y);
 }
