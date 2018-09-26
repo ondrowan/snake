@@ -65,7 +65,7 @@ int main()
     Snake snake(10, 10);
     entities.push_back(snake);
 
-    auto berry = spawnBerry(worldStart, worldEnd);
+    auto berry = spawnBerry(worldStart, worldEnd, snake);
     entities.push_back(berry);
 
     auto currentTime = std::chrono::high_resolution_clock::now();
@@ -106,7 +106,7 @@ int main()
                     entities.erase(std::remove_if(entities.begin(), entities.end(), [collision](auto entity) {
                         return std::addressof(entity.get()) == std::addressof(collision.value().first);
                     }));
-                    berry = spawnBerry(worldStart, worldEnd);
+                    berry = spawnBerry(worldStart, worldEnd, snake);
                     entities.push_back(berry);
                     snake.grow();
                     break;
