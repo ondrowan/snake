@@ -6,39 +6,6 @@
 #include "berry.h"
 #include "world.h"
 
-void render(const std::vector<std::reference_wrapper<Entity>>& entities)
-{
-    for (auto entity : entities)
-    {
-        const char* character;
-
-        for (auto point : entity.get().getCoordinates())
-        {
-            switch (point.material)
-            {
-                case Material::SNAKE_HEAD:
-                    attron(COLOR_PAIR(1));
-                    character = "O";
-                    break;
-                case Material::SNAKE_BODY:
-                    attron(COLOR_PAIR(1));
-                    character = "o";
-                    break;
-                case Material::WALL:
-                    attron(COLOR_PAIR(3));
-                    character = "#";
-                    break;
-                case Material::BERRY:
-                    attron(COLOR_PAIR(2));
-                    character = ".";
-                    break;
-            }
-
-            mvprintw(point.y, point.x, character);
-        }
-    }
-}
-
 int main()
 {
     int windowHeight = 0, windowWidth = 0;
@@ -68,13 +35,17 @@ int main()
     auto berry = spawnBerry(worldStart, worldEnd, snake);
     entities.push_back(berry);
 
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    auto lastMove = currentTime;
+    auto lastMove = std::chrono::high_resolution_clock::now();
     bool gameOver = false;
     int score = 0;
 
     while (true)
     {
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMove).count();
+
+        // Handle input
+
         switch (wgetch(window))
         {
             case 'w':
@@ -91,8 +62,14 @@ int main()
                 break;
         }
 
+        // Update
+
+        if (elapsedTime > 200 && !gameOver) {
+            snake.move();
+            lastMove = std::chrono::high_resolution_clock::now();
+        }
+
         auto collision = snake.checkCollision(entities);
-        clear();
 
         if (collision.has_value())
         {
@@ -118,18 +95,44 @@ int main()
             }
         }
 
+        // Render
+
+        clear();
+
         attron(COLOR_PAIR(3));
         mvprintw(31, 30, "Score: %i", score);
 
-        if (std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMove).count() > 200 && !gameOver) {
-            snake.move();
-            lastMove = std::chrono::high_resolution_clock::now();
+        for (auto entity : entities)
+        {
+            const char* character;
+
+            for (auto point : entity.get().getCoordinates())
+            {
+                switch (point.material)
+                {
+                    case Material::SNAKE_HEAD:
+                        attron(COLOR_PAIR(1));
+                        character = "O";
+                        break;
+                    case Material::SNAKE_BODY:
+                        attron(COLOR_PAIR(1));
+                        character = "o";
+                        break;
+                    case Material::WALL:
+                        attron(COLOR_PAIR(3));
+                        character = "#";
+                        break;
+                    case Material::BERRY:
+                        attron(COLOR_PAIR(2));
+                        character = ".";
+                        break;
+                }
+
+                mvprintw(point.y, point.x, character);
+            }
         }
 
-        render(entities);
         refresh();
-
-        currentTime = std::chrono::high_resolution_clock::now();
     }
 
     endwin();
