@@ -16,3 +16,12 @@ are prerequisites.
 * Change into build directory: `cd build`
 * Create makefiles: `cmake -G 'Unix Makefiles' ..`
 * If everything goes well, you should be able to run the game: `./snake`
+
+
+## My learning goals
+
+* Trying out C++ and its ecosystem:
+  * Writing first real(-ish) program
+  * CMake
+  * clang
+* Writing the simplest possible game
