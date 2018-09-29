@@ -18,6 +18,13 @@ are prerequisites.
 * If everything goes well, you should be able to run the game: `./snake`
 
 
+## Note about optional.h
+
+At the time being MacOS doesn't contain this header (only as
+`experimental/optional` which is missing some methods) and I wanted to try it. I
+had to add it directly to the repository.
+
+
 ## My learning goals
 
 * Trying out C++ and its ecosystem:
