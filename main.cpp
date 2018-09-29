@@ -20,6 +20,7 @@ int main()
     init_pair(1, COLOR_GREEN, COLOR_BLACK);
     init_pair(2, COLOR_RED, COLOR_BLACK);
     init_pair(3, COLOR_WHITE, COLOR_BLACK);
+    init_pair(4, COLOR_WHITE, COLOR_RED);
 
     int worldWidth = 20;
     int worldHeight = 10;
@@ -142,6 +143,11 @@ int main()
 
                 mvprintw(point.y, point.x, character);
             }
+        }
+
+        if (gameOver) {
+            attron(COLOR_PAIR(4));
+            mvprintw(worldEndY - worldHeight / 2, worldEndX - worldWidth / 2 - 5, "GAME OVER");
         }
 
         refresh();
