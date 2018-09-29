@@ -35,7 +35,6 @@ int main()
     int worldEndX = worldStartX + worldWidth;
     int worldEndY = worldStartY + worldHeight;
 
-
     const Point worldStart{ worldStartX, worldStartY };
     const Point worldEnd{ worldEndX, worldEndY };
 
