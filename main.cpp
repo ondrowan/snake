@@ -76,6 +76,7 @@ int main()
             switch (collision.value().second)
             {
                 case Material::WALL:
+                case Material::SNAKE_BODY:
                     gameOver = true;
                     break;
                 case Material::BERRY:
@@ -86,9 +87,6 @@ int main()
                     berry = spawnBerry(worldStart, worldEnd, snake);
                     entities.push_back(berry);
                     snake.grow();
-                    break;
-                case Material::SNAKE_BODY:
-                    gameOver = true;
                     break;
                 case Material::SNAKE_HEAD:
                     break;
