@@ -21,15 +21,22 @@ int main()
     init_pair(2, COLOR_RED, COLOR_BLACK);
     init_pair(3, COLOR_WHITE, COLOR_BLACK);
 
-    const Point worldStart{ 0, 0 };
-    const Point worldEnd{ 30, 20 };
+    int worldWidth = 20;
+    int worldHeight = 10;
+    int worldStartX = windowWidth / 2 - worldWidth / 2;
+    int worldStartY = windowHeight / 2 - worldWidth / 2;
+    int worldEndX = worldStartX + worldWidth;
+    int worldEndY = worldStartY + worldHeight;
+
+    const Point worldStart{ worldStartX, worldStartY };
+    const Point worldEnd{ worldEndX, worldEndY };
 
     std::vector<std::reference_wrapper<Entity>> entities;
 
     World world(worldStart, worldEnd);
     entities.push_back(world);
 
-    Snake snake(10, 10);
+    Snake snake(worldStartX + 5, worldStartY + 5);
     entities.push_back(snake);
 
     auto berry = spawnBerry(worldStart, worldEnd, snake);
@@ -98,7 +105,7 @@ int main()
         clear();
 
         attron(COLOR_PAIR(3));
-        mvprintw(31, 30, "Score: %i", score);
+        mvprintw(worldEndY + 1, worldEndX - worldWidth, "Score: %i", score);
 
         for (auto entity : entities)
         {
