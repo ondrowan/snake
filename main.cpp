@@ -23,10 +23,17 @@ int main()
 
     int worldWidth = 20;
     int worldHeight = 10;
+
+    if (windowWidth < worldWidth || windowHeight < worldHeight + 1) {
+        printf("Terminal window is too small to play the game.\n");
+        return 0;
+    }
+
     int worldStartX = windowWidth / 2 - worldWidth / 2;
     int worldStartY = windowHeight / 2 - worldWidth / 2;
     int worldEndX = worldStartX + worldWidth;
     int worldEndY = worldStartY + worldHeight;
+
 
     const Point worldStart{ worldStartX, worldStartY };
     const Point worldEnd{ worldEndX, worldEndY };
