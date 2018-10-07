@@ -7,4 +7,9 @@ struct Point
     int x;
     int y;
     Material material;
+
+    bool operator<(const Point& rhs) const
+    {
+        return x < rhs.x || y < rhs.y;
+    }
 };

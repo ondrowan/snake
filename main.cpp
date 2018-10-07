@@ -1,10 +1,44 @@
 #include <vector>
+#include <iostream>
 #include <chrono>
 #include <ncurses.h>
+#include <set>
+#include <algorithm>
 #include "snake.h"
 #include "point.h"
 #include "berry.h"
 #include "world.h"
+
+std::set<Point> getAllCoordinates(const Point& worldStart, const Point& worldEnd)
+{
+    auto allCoordinates = std::set<Point>{};
+
+    for (int x = worldStart.x + 1; x < worldEnd.x; x++)
+    {
+        for (int y = worldStart.y + 1; y < worldEnd.y; y++)
+        {
+            allCoordinates.insert(Point{x, y});
+        }
+    }
+
+    return allCoordinates;
+}
+
+std::vector<Point> getEmptyCoordinates(const std::set<Point>& allCoordinates, const std::vector<std::reference_wrapper<Entity>>& entities)
+{
+    auto entityCoordinates = std::set<Point>{};
+
+    for (auto entity : entities)
+    {
+        auto coordinates = entity.get().getCoordinates();
+        entityCoordinates.insert(coordinates.begin(), coordinates.end());
+    }
+
+    std::vector<Point> emptyCoordinates;
+    std::set_difference(allCoordinates.begin(), allCoordinates.end(), entityCoordinates.begin(), entityCoordinates.end(), std::inserter(emptyCoordinates, emptyCoordinates.end()));
+
+    return emptyCoordinates;
+}
 
 int main()
 {
@@ -37,6 +71,7 @@ int main()
 
     const Point worldStart{ worldStartX, worldStartY };
     const Point worldEnd{ worldEndX, worldEndY };
+    auto allCoordinates = getAllCoordinates(worldStart, worldEnd);
 
     std::vector<std::reference_wrapper<Entity>> entities;
 
@@ -46,7 +81,7 @@ int main()
     Snake snake(worldStartX + 5, worldStartY + 5);
     entities.push_back(snake);
 
-    auto berry = spawnBerry(worldStart, worldEnd, snake);
+    auto berry = spawnBerry(getEmptyCoordinates(allCoordinates, entities));
     entities.push_back(berry);
 
     auto lastMove = std::chrono::high_resolution_clock::now();
@@ -98,7 +133,7 @@ int main()
                     entities.erase(std::remove_if(entities.begin(), entities.end(), [collision](auto entity) {
                         return std::addressof(entity.get()) == std::addressof(collision.value().first);
                     }));
-                    berry = spawnBerry(worldStart, worldEnd, snake);
+                    berry = spawnBerry(getEmptyCoordinates(allCoordinates, entities));
                     entities.push_back(berry);
                     snake.grow();
                     break;

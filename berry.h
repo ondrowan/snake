@@ -9,4 +9,4 @@ public:
     Berry(int x, int y);
 };
 
-Berry spawnBerry(Point from, Point to, Snake snake);
+Berry spawnBerry(std::vector<Point> emptyCoordinates);
